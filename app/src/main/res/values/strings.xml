@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MoodTracker</string>
+    <string name="note_button">Add note</string>
+    <string name="history_button">History</string>
+    <string name="mood_disappointed">Disappointed</string>
+    <string name="mood_happy">Happy</string>
+    <string name="mood_normal">Normal</string>
+    <string name="mood_sad">Sad</string>
+    <string name="mood_super_happy">Super Happy</string>
 </resources>
