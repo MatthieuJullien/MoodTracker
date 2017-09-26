@@ -6,17 +6,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 
 import jullien.matthieu.moodtracker.View.MoodFragment;
+import jullien.matthieu.moodtracker.View.VerticalViewPager;
 
 public class MainActivity extends FragmentActivity {
     private static final int NUM_PAGES = 5;
     private static final int HAPPY_INDEX = 3;
 
-    // The pager widget, which handles animation and allows swiping horizontally to access previous
+    // The pager widget, which handles animation and allows swiping vertically to access previous
     // and next wizard steps.
-    private ViewPager mPager;
+    private VerticalViewPager mPager;
 
     // The pager adapter, which provides the pages to the view pager widget.
     private PagerAdapter mPagerAdapter;

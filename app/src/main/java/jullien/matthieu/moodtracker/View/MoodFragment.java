@@ -19,7 +19,6 @@ public class MoodFragment extends Fragment {
     private ImageView mImageHistory;
     private String mNote = "";
 
-
     //newInstance constructor for creating fragment with arguments
     public static MoodFragment newInstance(int moodIndex) {
         MoodFragment newFragment = new MoodFragment();
@@ -33,7 +32,6 @@ public class MoodFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mMoodIndex = getArguments().getInt("moodIndex", 0);
     }
 
@@ -64,6 +62,5 @@ public class MoodFragment extends Fragment {
         rootView = (ViewGroup) inflater.inflate(layoutId, container, false);
         //TODO Get the clicks on buttons
         return rootView;
-
     }
 }
