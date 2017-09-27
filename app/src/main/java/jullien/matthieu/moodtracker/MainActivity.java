@@ -1,20 +1,27 @@
 package jullien.matthieu.moodtracker;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import jullien.matthieu.moodtracker.View.MoodFragment;
 import jullien.matthieu.moodtracker.View.VerticalViewPager;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements View.OnClickListener {
     private static final int NUM_PAGES = 5;
     private static final int HAPPY_INDEX = 3;//TODO enum ?
+    private static SharedPreferences mPreferences;
 
     // The pager widget, which handles animation and allows swiping vertically to access previous
     // and next wizard steps.
@@ -24,6 +31,9 @@ public class MainActivity extends FragmentActivity {
     private PagerAdapter mPagerAdapter;
     // The last mood chosen for this day
     private int mCurrentMood = HAPPY_INDEX;
+    private ImageView mImageNote;
+    private ImageView mImageHistory;
+    private String mNote = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +53,21 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onPageSelected(int position) {
                 mCurrentMood = position;
-
-                SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-                preferences.edit().putInt("currentMood", mCurrentMood).apply();
+                mPreferences = getPreferences(MODE_PRIVATE);
+                mPreferences.edit().putInt("currentMood", mCurrentMood).apply();
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
-        mCurrentMood = getPreferences(MODE_PRIVATE).getInt("currentMood", HAPPY_INDEX);
+        mPreferences = getPreferences(MODE_PRIVATE);
+        mCurrentMood = mPreferences.getInt("currentMood", HAPPY_INDEX);
+        mNote = mPreferences.getString("note", null);
         mPager.setCurrentItem(mCurrentMood);
+        mImageNote = findViewById(R.id.note_image);
+        mImageHistory = findViewById(R.id.history_image);
+        mImageNote.setOnClickListener(this);
+        mImageHistory.setOnClickListener(this);
     }
 
     @Override
@@ -64,6 +79,38 @@ public class MainActivity extends FragmentActivity {
         } else {
             // Otherwise, select the previous step.
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mImageNote) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Commentaire");
+            // Set up the input
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            // Set up the buttons
+            builder.setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mNote = input.getText().toString();
+                    mPreferences = getPreferences(MODE_PRIVATE);
+                    mPreferences.edit().putString("note", mNote).apply();
+                }
+            });
+            builder.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+        } else if (view == mImageHistory) {
+            System.out.println("IMAGE TWO");
+            //ouvrir actvité historique
         }
     }
 
