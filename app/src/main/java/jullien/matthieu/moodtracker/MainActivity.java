@@ -1,18 +1,20 @@
 package jullien.matthieu.moodtracker;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 
 import jullien.matthieu.moodtracker.View.MoodFragment;
 import jullien.matthieu.moodtracker.View.VerticalViewPager;
 
 public class MainActivity extends FragmentActivity {
     private static final int NUM_PAGES = 5;
-    private static final int HAPPY_INDEX = 3;
+    private static final int HAPPY_INDEX = 3;//TODO enum ?
 
     // The pager widget, which handles animation and allows swiping vertically to access previous
     // and next wizard steps.
@@ -20,6 +22,8 @@ public class MainActivity extends FragmentActivity {
 
     // The pager adapter, which provides the pages to the view pager widget.
     private PagerAdapter mPagerAdapter;
+    // The last mood chosen for this day
+    private int mCurrentMood = HAPPY_INDEX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,25 @@ public class MainActivity extends FragmentActivity {
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new MoodPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-        mPager.setCurrentItem(HAPPY_INDEX);
+        // Callback interface for responding to changing state of the selected page
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            // Save the mood corresponding to this page in mCurrentMood
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentMood = position;
+
+                SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+                preferences.edit().putInt("currentMood", mCurrentMood).apply();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+        mCurrentMood = getPreferences(MODE_PRIVATE).getInt("currentMood", HAPPY_INDEX);
+        mPager.setCurrentItem(mCurrentMood);
     }
 
     @Override

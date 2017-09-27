@@ -5,19 +5,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import jullien.matthieu.moodtracker.R;
 
 /**
  * This class represent a mood on screen.
  */
-public class MoodFragment extends Fragment {
+public class MoodFragment extends Fragment /*implements View.OnClickListener*/{
     private int mMoodIndex;
-    private ViewGroup rootView;
-    private ImageView mImageNote;
-    private ImageView mImageHistory;
-    private String mNote = "";
 
     //newInstance constructor for creating fragment with arguments
     public static MoodFragment newInstance(int moodIndex) {
@@ -35,7 +30,7 @@ public class MoodFragment extends Fragment {
         mMoodIndex = getArguments().getInt("moodIndex", 0);
     }
 
-    // Return the rootView associated with the current mood.
+    // Return the View associated with the current mood.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         int layoutId;
@@ -59,8 +54,6 @@ public class MoodFragment extends Fragment {
                 layoutId = R.layout.fragment_mood_happy;
                 break;
         }
-        rootView = (ViewGroup) inflater.inflate(layoutId, container, false);
-        //TODO Get the clicks on buttons
-        return rootView;
+        return inflater.inflate(layoutId, container, false);
     }
 }
