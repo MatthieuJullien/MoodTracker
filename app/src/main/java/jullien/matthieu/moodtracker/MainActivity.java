@@ -1,7 +1,9 @@
 package jullien.matthieu.moodtracker;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,6 +17,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+
+import jullien.matthieu.moodtracker.Model.History;
+import jullien.matthieu.moodtracker.Model.HistoryDbHelper;
 import jullien.matthieu.moodtracker.View.MoodFragment;
 import jullien.matthieu.moodtracker.View.VerticalViewPager;
 
@@ -34,6 +40,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView mImageNote;
     private ImageView mImageHistory;
     private String mNote = "";
+    private HistoryDbHelper mDbHelper = new HistoryDbHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 mCurrentMood = position;
                 mPreferences = getPreferences(MODE_PRIVATE);
                 mPreferences.edit().putInt("currentMood", mCurrentMood).apply();
+                //TODO remettre à zéro le commentaire
+
+                //TODO: enregistrement à faire à minuit :
+                //============================
+                mDbHelper.addNewDay(mCurrentMood, mNote);
+
+                //=============================
             }
 
             @Override
@@ -109,8 +123,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             });
             builder.show();
         } else if (view == mImageHistory) {
-            System.out.println("IMAGE TWO");
+
             //ouvrir actvité historique
+            ArrayList<History> historyList = mDbHelper.getHistory();
+            for (History h : historyList) {
+                System.out.println(h.toString());
+            }
+            //mHistoryAdapter = new HistoryAdapter(this, mHistoryList);
+            //mListView.setAdapter(mHistoryAdapter);
+
         }
     }
 
