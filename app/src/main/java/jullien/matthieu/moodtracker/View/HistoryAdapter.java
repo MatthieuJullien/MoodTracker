@@ -12,10 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import jullien.matthieu.moodtracker.Model.History;
 import jullien.matthieu.moodtracker.Model.MoodInfo;
 import jullien.matthieu.moodtracker.R;
+
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class HistoryAdapter extends ArrayAdapter<History> {
     private DisplayMetrics mMetrics;
@@ -41,10 +45,35 @@ public class HistoryAdapter extends ArrayAdapter<History> {
         ImageView historyDayImg = convertView.findViewById(R.id.history_day_image);
         convertView.setBackgroundResource(MoodInfo.COLORS[moodIndex]);
 
-
-
-
-        historyDayText.setText("Il y a X days");
+        long nbDayPassed = DAYS.convert(new Date().getTime() - history.getDate().getTime(), MILLISECONDS);
+        String strdayPassed;
+        switch ((int)nbDayPassed) {
+            case 0:
+                strdayPassed = "Hier";
+                break;
+            case 1:
+                strdayPassed = "Avant_hier";
+                break;
+            case 2:
+                strdayPassed = "Il y a trois jours";
+                break;
+            case 3:
+                strdayPassed = "Il y a quatre jours";
+                break;
+            case 4:
+                strdayPassed = "Il y a cinq jours";
+                break;
+            case 5:
+                strdayPassed = "Il y a six jours";
+                break;
+            case 6:
+                strdayPassed = "Il y a une semaine";
+                break;
+            default:
+                strdayPassed = "Il y a " + nbDayPassed + "jours";
+                break;
+        }
+        historyDayText.setText(strdayPassed);
         final String note = history.getNote();
         if (note != null && !note.equals("")) {
             historyDayImg.setVisibility(View.VISIBLE);
