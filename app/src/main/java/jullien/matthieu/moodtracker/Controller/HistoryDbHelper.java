@@ -1,4 +1,4 @@
-package jullien.matthieu.moodtracker.Model;
+package jullien.matthieu.moodtracker.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import jullien.matthieu.moodtracker.Model.History;
+import jullien.matthieu.moodtracker.Model.MoodDbContract;
 
 public class HistoryDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 2;

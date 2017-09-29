@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import jullien.matthieu.moodtracker.R;
+import jullien.matthieu.moodtracker.Model.MoodInfo;
 
 /**
  * This class represent a mood on screen.
@@ -33,27 +33,7 @@ public class MoodFragment extends Fragment /*implements View.OnClickListener*/{
     // Return the View associated with the current mood.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int layoutId;
-        switch (mMoodIndex) {
-            case 0:
-                layoutId = R.layout.fragment_mood_sad;
-                break;
-            case 1:
-                layoutId = R.layout.fragment_mood_disappointed;
-                break;
-            case 2:
-                layoutId = R.layout.fragment_mood_normal;
-                break;
-            case 3:
-                layoutId = R.layout.fragment_mood_happy;
-                break;
-            case 4:
-                layoutId = R.layout.fragment_mood_super_happy;
-                break;
-            default:
-                layoutId = R.layout.fragment_mood_happy;
-                break;
-        }
+        int layoutId = MoodInfo.LAYOUTS[mMoodIndex];
         return inflater.inflate(layoutId, container, false);
     }
 }

@@ -1,9 +1,8 @@
-package jullien.matthieu.moodtracker;
+package jullien.matthieu.moodtracker.Controller;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,16 +16,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
-
-import jullien.matthieu.moodtracker.Model.History;
-import jullien.matthieu.moodtracker.Model.HistoryDbHelper;
+import jullien.matthieu.moodtracker.Model.MoodInfo;
+import jullien.matthieu.moodtracker.R;
 import jullien.matthieu.moodtracker.View.MoodFragment;
 import jullien.matthieu.moodtracker.View.VerticalViewPager;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
     private static final int NUM_PAGES = 5;
-    private static final int HAPPY_INDEX = 3;//TODO enum ?
     private static SharedPreferences mPreferences;
 
     // The pager widget, which handles animation and allows swiping vertically to access previous
@@ -36,7 +32,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     // The pager adapter, which provides the pages to the view pager widget.
     private PagerAdapter mPagerAdapter;
     // The last mood chosen for this day
-    private int mCurrentMood = HAPPY_INDEX;
+    private int mCurrentMood = MoodInfo.HAPPY_INDEX;
     private ImageView mImageNote;
     private ImageView mImageHistory;
     private String mNote = "";
@@ -75,7 +71,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void onPageScrollStateChanged(int state) {}
         });
         mPreferences = getPreferences(MODE_PRIVATE);
-        mCurrentMood = mPreferences.getInt("currentMood", HAPPY_INDEX);
+        mCurrentMood = mPreferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
         mNote = mPreferences.getString("note", null);
         mPager.setCurrentItem(mCurrentMood);
         mImageNote = findViewById(R.id.note_image);
@@ -123,15 +119,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             });
             builder.show();
         } else if (view == mImageHistory) {
-
-            //ouvrir actvité historique
-            ArrayList<History> historyList = mDbHelper.getHistory();
-            for (History h : historyList) {
-                System.out.println(h.toString());
-            }
-            //mHistoryAdapter = new HistoryAdapter(this, mHistoryList);
-            //mListView.setAdapter(mHistoryAdapter);
-
+            Intent historyActivity = new Intent(MainActivity.this, HistoryActivity.class);
+            startActivity(historyActivity);
         }
     }
 
