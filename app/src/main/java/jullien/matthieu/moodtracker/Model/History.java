@@ -1,5 +1,8 @@
 package jullien.matthieu.moodtracker.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 public class History {
@@ -40,6 +43,7 @@ public class History {
         mNote = note;
     }
 
+    //TODO delete toString
     @Override
     public String toString() {
         return "History{" +

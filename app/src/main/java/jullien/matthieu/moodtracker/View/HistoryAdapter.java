@@ -52,7 +52,7 @@ public class HistoryAdapter extends ArrayAdapter<History> {
                 strdayPassed = "Hier";
                 break;
             case 1:
-                strdayPassed = "Avant_hier";
+                strdayPassed = "Avant hier";
                 break;
             case 2:
                 strdayPassed = "Il y a trois jours";
