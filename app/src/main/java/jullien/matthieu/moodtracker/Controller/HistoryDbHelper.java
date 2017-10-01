@@ -13,6 +13,7 @@ import java.util.Date;
 import jullien.matthieu.moodtracker.Model.History;
 import jullien.matthieu.moodtracker.Model.MoodDbContract;
 
+// A helper class to manage database creation and version management.
 public class HistoryDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "MoodTracker.db";
@@ -48,6 +49,8 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
     public ArrayList<History> getHistory() {
         ArrayList<History> historyList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+
+        // Get the 7 last rows of the whole history table
         Cursor c = db.rawQuery("SELECT  * FROM " + MoodDbContract.HistoryEntry.TABLE_NAME +
                         " ORDER BY " + MoodDbContract.HistoryEntry._ID +
                         " DESC LIMIT 7;", null);

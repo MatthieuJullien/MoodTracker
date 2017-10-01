@@ -2,7 +2,9 @@ package jullien.matthieu.moodtracker.Model;
 
 import jullien.matthieu.moodtracker.R;
 
+//  General informations about the 5 moods
 public class MoodInfo {
+    public static final int NB_MOOD = 5;
     public static final int HAPPY_INDEX = 3;
 
     public static final int LAYOUTS[] = {

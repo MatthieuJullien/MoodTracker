@@ -22,6 +22,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:src="@drawable/ic_note_add_black"
+            android:contentDescription="@string/see_note"
             android:visibility="invisible"/>
     </RelativeLayout>
 </LinearLayout>

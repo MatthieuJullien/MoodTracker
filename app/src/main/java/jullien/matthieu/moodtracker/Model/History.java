@@ -1,10 +1,8 @@
 package jullien.matthieu.moodtracker.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.Date;
 
+// This class represents an entry in the history
 public class History {
     private long mId;
     private int mMoodIndex;
@@ -41,16 +39,5 @@ public class History {
 
     public void setNote(String note) {
         mNote = note;
-    }
-
-    //TODO delete toString
-    @Override
-    public String toString() {
-        return "History{" +
-                "mId=" + mId +
-                ", mMoodIndex=" + mMoodIndex +
-                ", mDate=" + mDate +
-                ", mNote='" + mNote + '\'' +
-                '}';
     }
 }

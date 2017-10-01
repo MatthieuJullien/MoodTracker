@@ -40,7 +40,6 @@ public class HistoryAdapter extends ArrayAdapter<History> {
         int moodIndex = history.getMoodIndex();
         convertView.getLayoutParams().width = mMetrics.widthPixels / 5 * (1 + moodIndex);
 
-
         TextView historyDayText = convertView.findViewById(R.id.history_day_text);
         ImageView historyDayImg = convertView.findViewById(R.id.history_day_image);
         convertView.setBackgroundResource(MoodInfo.COLORS[moodIndex]);
@@ -84,9 +83,6 @@ public class HistoryAdapter extends ArrayAdapter<History> {
                 }
             });
         }
-
-
-
         // Return the completed view to render on screen
         return convertView;
     }

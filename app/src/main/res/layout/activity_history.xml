@@ -10,6 +10,7 @@
         android:src="@drawable/ic_note_add_black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/piechart"
         android:layout_margin="10dp"/>
 
     <ListView

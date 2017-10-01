@@ -21,18 +21,18 @@ import jullien.matthieu.moodtracker.R;
 import jullien.matthieu.moodtracker.View.MoodFragment;
 import jullien.matthieu.moodtracker.View.VerticalViewPager;
 
+
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
-    private static final int NUM_PAGES = 5;
     private static SharedPreferences mPreferences;
 
-    // The pager widget, which handles animation and allows swiping vertically to access previous
-    // and next wizard steps.
+    // The pager widget, which handles animation and allows swiping vertically
     private VerticalViewPager mPager;
 
-    // The pager adapter, which provides the pages to the view pager widget.
-    private PagerAdapter mPagerAdapter;
-    // The last mood chosen for this day
+
+
+    // The last mood chosen for this day. By default, set to happy.
     private int mCurrentMood = MoodInfo.HAPPY_INDEX;
+
     private ImageView mImageNote;
     private ImageView mImageHistory;
     private String mNote = "";
@@ -43,10 +43,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Instantiate a ViewPager and a PagerAdapter.
         mPager = findViewById(R.id.pager);
-        mPagerAdapter = new MoodPagerAdapter(getSupportFragmentManager());
+
+        // The pager adapter, which provides the pages to the view pager widget.
+        PagerAdapter mPagerAdapter = new MoodPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
         // Callback interface for responding to changing state of the selected page
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -58,22 +60,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 mCurrentMood = position;
                 mPreferences = getPreferences(MODE_PRIVATE);
                 mPreferences.edit().putInt("currentMood", mCurrentMood).apply();
-                //TODO remettre à zéro le commentaire
 
+                //TODO remettre à zéro le commentaire et l'humeur
                 //TODO: enregistrement à faire à minuit :
                 //============================
                 mDbHelper.addNewDay(mCurrentMood, mNote);
-
                 //=============================
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
+        //Get current mood and note
         mPreferences = getPreferences(MODE_PRIVATE);
         mCurrentMood = mPreferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
         mNote = mPreferences.getString("note", null);
+
+        // Set the current page to the current mood
         mPager.setCurrentItem(mCurrentMood);
+
         mImageNote = findViewById(R.id.note_image);
         mImageHistory = findViewById(R.id.history_image);
         mImageNote.setOnClickListener(this);
@@ -97,15 +102,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (view == mImageNote) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Commentaire");
+
             // Set up the input
             final EditText input = new EditText(this);
-            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+
+            // Specify the type of input expected
             input.setInputType(InputType.TYPE_CLASS_TEXT);
             builder.setView(input);
+
             // Set up the buttons
             builder.setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    // Save the note
                     mNote = input.getText().toString();
                     mPreferences = getPreferences(MODE_PRIVATE);
                     mPreferences.edit().putString("note", mNote).apply();
@@ -124,6 +133,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
+    // FragmentPageAdapter which provide the pages as fragments
     private class MoodPagerAdapter extends FragmentPagerAdapter {
         private MoodPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -136,7 +146,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return MoodInfo.NB_MOOD;
         }
     }
 }

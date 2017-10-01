@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 // This class extends the default ViewPager to allow vertical swiping instead of horizontal swiping
+// @see https://stackoverflow.com/questions/13477820/android-vertical-viewpager
 public class VerticalViewPager extends ViewPager {
 
     public VerticalViewPager(Context context) {

@@ -1,7 +1,6 @@
 package jullien.matthieu.moodtracker.Controller;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -21,7 +20,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);//doesn't work ?! TODO masquer barre de titre
+        //requestWindowFeature(Window.FEATURE_NO_TITLE); // Suppose to hide title bar
 
         setContentView(R.layout.activity_history);
 

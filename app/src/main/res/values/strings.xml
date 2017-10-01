@@ -7,4 +7,6 @@
     <string name="mood_normal">Normal</string>
     <string name="mood_sad">Sad</string>
     <string name="mood_super_happy">Super Happy</string>
+    <string name="piechart">Pie chart</string>
+    <string name="see_note">See note</string>
 </resources>

@@ -8,13 +8,11 @@ import android.view.ViewGroup;
 
 import jullien.matthieu.moodtracker.Model.MoodInfo;
 
-/**
- * This class represent a mood on screen.
- */
-public class MoodFragment extends Fragment /*implements View.OnClickListener*/{
+// This class represent a mood on screen.
+public class MoodFragment extends Fragment {
     private int mMoodIndex;
 
-    //newInstance constructor for creating fragment with arguments
+    // newInstance constructor for creating fragment with arguments
     public static MoodFragment newInstance(int moodIndex) {
         MoodFragment newFragment = new MoodFragment();
         Bundle args = new Bundle();
