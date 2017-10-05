@@ -1,7 +1,13 @@
 package jullien.matthieu.moodtracker.Controller;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +21,9 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import jullien.matthieu.moodtracker.Model.MoodInfo;
 import jullien.matthieu.moodtracker.R;
@@ -28,20 +37,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     // The pager widget, which handles animation and allows swiping vertically
     private VerticalViewPager mPager;
 
-
-
     // The last mood chosen for this day. By default, set to happy.
     private int mCurrentMood = MoodInfo.HAPPY_INDEX;
 
     private ImageView mImageNote;
     private ImageView mImageHistory;
     private String mNote = "";
-    private HistoryDbHelper mDbHelper = new HistoryDbHelper(this);
+    private AlarmReceiver mAlarmReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Get current mood and note
+        mPreferences = getSharedPreferences("data", MODE_PRIVATE);
+        mCurrentMood = mPreferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
+        mNote = mPreferences.getString("note", null);
+
+        // Create an alarm to save the app state (mood and note) at midnight everyday
+        setAlarm();
 
         mPager = findViewById(R.id.pager);
 
@@ -58,23 +73,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void onPageSelected(int position) {
                 mCurrentMood = position;
-                mPreferences = getPreferences(MODE_PRIVATE);
                 mPreferences.edit().putInt("currentMood", mCurrentMood).apply();
-
-                //TODO remettre à zéro le commentaire et l'humeur
-                //TODO: enregistrement à faire à minuit :
-                //============================
-                mDbHelper.addNewDay(mCurrentMood, mNote);
-                //=============================
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
-        //Get current mood and note
-        mPreferences = getPreferences(MODE_PRIVATE);
-        mCurrentMood = mPreferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
-        mNote = mPreferences.getString("note", null);
+
 
         // Set the current page to the current mood
         mPager.setCurrentItem(mCurrentMood);
@@ -83,6 +88,27 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mImageHistory = findViewById(R.id.history_image);
         mImageNote.setOnClickListener(this);
         mImageHistory.setOnClickListener(this);
+    }
+
+    private void resetMood() {
+        mCurrentMood = MoodInfo.HAPPY_INDEX;
+        mNote = null;
+        mPreferences.edit().putInt("currentMood", mCurrentMood).apply();
+        mPreferences.edit().putString("note", mNote).apply();
+        mPager.setCurrentItem(mCurrentMood);
+        Toast.makeText(MainActivity.this, "Une nouvelle journée débute...", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setAlarm() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 0); // midnight
+
+        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        //am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 10, pendingIntent);
     }
 
     @Override
@@ -111,16 +137,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             builder.setView(input);
 
             // Set up the buttons
-            builder.setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.validate, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Save the note
                     mNote = input.getText().toString();
-                    mPreferences = getPreferences(MODE_PRIVATE);
                     mPreferences.edit().putString("note", mNote).apply();
                 }
             });
-            builder.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -147,6 +172,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         @Override
         public int getCount() {
             return MoodInfo.NB_MOOD;
+        }
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SharedPreferences preferences = context.getSharedPreferences("data", MODE_PRIVATE);
+            int mood = preferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
+            String note = preferences.getString("note", null);
+
+            System.out.println("Mood = " + mood + " : " + note);
+            HistoryDbHelper dbHelper = new HistoryDbHelper(context);
+            dbHelper.addNewDay(mood, note);
+            dbHelper.close();
+           // resetMood();
         }
     }
 }

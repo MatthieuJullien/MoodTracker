@@ -43,7 +43,17 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
 
         // Insert the new row, returning the primary key value of the new row
         db.insert(MoodDbContract.HistoryEntry.TABLE_NAME, null, values);
-        //TODO delete first id (limit 1) si taille > 7 ou 7 si taille < 14
+
+        // Trim the database to seven entries if there is more than thirty
+        Cursor c = db.rawQuery("SELECT * FROM " + MoodDbContract.HistoryEntry.TABLE_NAME +
+                " ORDER BY " + MoodDbContract.HistoryEntry._ID +
+                " ASC;", null);
+        c.moveToFirst();
+        int count = c.getCount();
+        c.close();
+        if (count > 30) {
+            db.delete(MoodDbContract.HistoryEntry.TABLE_NAME, MoodDbContract.HistoryEntry._ID + " <= " + (count - 7), null);
+        }
     }
 
     public ArrayList<History> getHistory() {
@@ -51,7 +61,7 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Get the 7 last rows of the whole history table
-        Cursor c = db.rawQuery("SELECT  * FROM " + MoodDbContract.HistoryEntry.TABLE_NAME +
+        Cursor c = db.rawQuery("SELECT * FROM " + MoodDbContract.HistoryEntry.TABLE_NAME +
                         " ORDER BY " + MoodDbContract.HistoryEntry._ID +
                         " DESC LIMIT 7;", null);
         if (c.moveToLast()) {

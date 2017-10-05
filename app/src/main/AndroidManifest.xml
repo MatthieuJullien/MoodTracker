@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".Controller.ChartActivity">
         </activity>
+        <!-- Register the Alarm Receiver !!! -->
+        <!--<receiver android:name=".Controller.MainActivity$AlarmReceiver"/>-->
     </application>
 
 </manifest>

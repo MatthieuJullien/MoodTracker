@@ -9,4 +9,6 @@
     <string name="mood_super_happy">Super Happy</string>
     <string name="piechart">Pie chart</string>
     <string name="see_note">See note</string>
+    <string name="validate">VALIDER</string>
+    <string name="cancel">ANNULER</string>
 </resources>

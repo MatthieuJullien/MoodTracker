@@ -46,13 +46,13 @@ public class ChartActivity extends AppCompatActivity {
         PieDataSet dataSet = new PieDataSet(entries, "Repartition des humeurs de ces sept derniers jours");
         dataSet.setValueTextSize(14f);
 
-        dataSet.setColors(new int[] {
+        dataSet.setColors(
                 ResourcesCompat.getColor(getResources(), MoodInfo.COLORS[0], null),
                 ResourcesCompat.getColor(getResources(), MoodInfo.COLORS[1], null),
                 ResourcesCompat.getColor(getResources(), MoodInfo.COLORS[2], null),
                 ResourcesCompat.getColor(getResources(), MoodInfo.COLORS[3], null),
                 ResourcesCompat.getColor(getResources(), MoodInfo.COLORS[4], null)
-        });
+        );
         // Space between slices (in degrees)
         dataSet.setSliceSpace(3f);
 
