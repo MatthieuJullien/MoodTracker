@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:columnCount="5">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/day_content"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/day_content"
+    <TextView
+        android:id="@+id/history_day_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text=""/>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_column="0"
-        android:layout_columnSpan="5">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/history_day_text"
+        <ImageView
+            android:id="@+id/history_day_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text=""/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/history_day_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:padding="10dp"
-                android:src="@drawable/ic_note_add_black"
-                android:contentDescription="@string/see_note"
-                android:visibility="invisible"/>
-        </RelativeLayout>
-    </LinearLayout>
-</GridLayout>
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/see_note"
+            android:padding="10dp"
+            android:src="@drawable/ic_note_add_black"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+</LinearLayout>
 

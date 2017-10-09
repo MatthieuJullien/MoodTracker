@@ -2,15 +2,12 @@ package jullien.matthieu.moodtracker.View;
 
 
 import android.content.Context;
-import android.net.LinkAddress;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,13 +39,8 @@ public class HistoryAdapter extends ArrayAdapter<History> {
         }
         int moodIndex = history.getMoodIndex();
 
-        //convertView.getLayoutParams().width = mMetrics.widthPixels / 5 * (1 + moodIndex);
-        LinearLayout row = convertView.findViewById(R.id.day_content);
-
-        GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-        layoutParams.columnSpec = GridLayout.spec(0, 1 + moodIndex);
-        row.setLayoutParams(layoutParams);
-        row.setBackgroundResource(MoodInfo.COLORS[moodIndex]);
+        convertView.getLayoutParams().width = mMetrics.widthPixels / 5 * (1 + moodIndex);
+        convertView.setBackgroundResource(MoodInfo.COLORS[moodIndex]);
 
         TextView historyDayText = convertView.findViewById(R.id.history_day_text);
         ImageView historyDayImg = convertView.findViewById(R.id.history_day_image);

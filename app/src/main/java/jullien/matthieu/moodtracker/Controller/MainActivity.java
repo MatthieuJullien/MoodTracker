@@ -1,10 +1,7 @@
 package jullien.matthieu.moodtracker.Controller;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -90,13 +87,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mImageHistory.setOnClickListener(this);
     }
 
-    private void resetMood() {
+    public void resetMood() {
         mCurrentMood = MoodInfo.HAPPY_INDEX;
         mNote = null;
         mPreferences.edit().putInt("currentMood", mCurrentMood).apply();
         mPreferences.edit().putString("note", mNote).apply();
         mPager.setCurrentItem(mCurrentMood);
-        Toast.makeText(MainActivity.this, "Une nouvelle journée débute...", Toast.LENGTH_SHORT).show();
+        if (this.hasWindowFocus()) {
+            Toast.makeText(MainActivity.this, "MoodTracker : Une nouvelle journée débute...", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void setAlarm() {
@@ -104,11 +104,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 0); // midnight
 
-        Intent alarmIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
+        AlarmReceiver alarmReceiver = new AlarmReceiver();
+        alarmReceiver.setMainActivity(this);
+        this.registerReceiver(alarmReceiver, new IntentFilter("jullien.matthieu.moodtracker"));
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent("jullien.matthieu.moodtracker"), 0);
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-        //am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 10, pendingIntent);
+        am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override
@@ -172,21 +173,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         @Override
         public int getCount() {
             return MoodInfo.NB_MOOD;
-        }
-    }
-
-    public static class AlarmReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            SharedPreferences preferences = context.getSharedPreferences("data", MODE_PRIVATE);
-            int mood = preferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
-            String note = preferences.getString("note", null);
-
-            System.out.println("Mood = " + mood + " : " + note);
-            HistoryDbHelper dbHelper = new HistoryDbHelper(context);
-            dbHelper.addNewDay(mood, note);
-            dbHelper.close();
-           // resetMood();
         }
     }
 }
