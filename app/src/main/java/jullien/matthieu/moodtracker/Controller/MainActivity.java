@@ -29,8 +29,8 @@ import jullien.matthieu.moodtracker.View.VerticalViewPager;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
+    public static final String PREFERENCES_KEY = "data";
     private static SharedPreferences mPreferences;
-
     // The pager widget, which handles animation and allows swiping vertically
     private VerticalViewPager mPager;
 
@@ -40,7 +40,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView mImageNote;
     private ImageView mImageHistory;
     private String mNote = "";
-    private AlarmReceiver mAlarmReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +47,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setContentView(R.layout.activity_main);
 
         //Get current mood and note
-        mPreferences = getSharedPreferences("data", MODE_PRIVATE);
+        mPreferences = getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
         mCurrentMood = mPreferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
         mNote = mPreferences.getString("note", null);
 
-        // Create an alarm to save the app state (mood and note) at midnight everyday
         setAlarm();
 
         mPager = findViewById(R.id.pager);
@@ -81,8 +79,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         // Set the current page to the current mood
         mPager.setCurrentItem(mCurrentMood);
 
-        mImageNote = findViewById(R.id.note_image);
-        mImageHistory = findViewById(R.id.history_image);
+        mImageNote = findViewById(R.id.main_note_image);
+        mImageHistory = findViewById(R.id.main_history_image);
         mImageNote.setOnClickListener(this);
         mImageHistory.setOnClickListener(this);
     }
@@ -99,6 +97,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
+    /**
+     * Create an alarm to save the app state (mood and note) at midnight everyday
+     */
     private void setAlarm() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -128,7 +129,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View view) {
         if (view == mImageNote) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Commentaire");
+            builder.setTitle(R.string.comment);
 
             // Set up the input
             final EditText input = new EditText(this);

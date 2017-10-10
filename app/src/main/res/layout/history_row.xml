@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <TextView
-        android:id="@+id/history_day_text"
+        android:id="@+id/history_row_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -17,7 +17,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/history_day_image"
+            android:id="@+id/history_row_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

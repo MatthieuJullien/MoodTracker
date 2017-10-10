@@ -13,7 +13,10 @@ import java.util.Date;
 import jullien.matthieu.moodtracker.Model.History;
 import jullien.matthieu.moodtracker.Model.MoodDbContract;
 
-// A helper class to manage database creation and version management.
+/**
+ * A helper class to manage database creation and version management.
+ */
+
 public class HistoryDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "MoodTracker.db";
@@ -33,6 +36,9 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Add a new entry in the history table
+     */
     public void addNewDay(int currentMood, String note) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -56,6 +62,10 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Get the last seven rows of the history table
+     * @return an ArrayList of history object representing the last days of the history
+     */
     public ArrayList<History> getHistory() {
         ArrayList<History> historyList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

@@ -16,7 +16,10 @@ import java.util.List;
 import jullien.matthieu.moodtracker.Model.MoodInfo;
 import jullien.matthieu.moodtracker.R;
 
-// Uses the MPAndroidChart library
+/**
+ * Display a pie chart with the distribution of the moods the last seven days
+ * Use the MPAndroidChart library
+ */
 public class ChartActivity extends AppCompatActivity {
 
     @Override

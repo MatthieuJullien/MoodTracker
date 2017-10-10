@@ -10,7 +10,7 @@ import jullien.matthieu.moodtracker.Model.MoodInfo;
 import static android.content.Context.MODE_PRIVATE;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    MainActivity mMainActivity = null;
+    private MainActivity mMainActivity = null;
 
     public void setMainActivity(MainActivity main) {
         mMainActivity = main;
@@ -18,7 +18,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences preferences = context.getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(MainActivity.PREFERENCES_KEY, MODE_PRIVATE);
         int mood = preferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
         String note = preferences.getString("note", null);
 

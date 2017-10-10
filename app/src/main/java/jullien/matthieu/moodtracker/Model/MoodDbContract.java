@@ -2,11 +2,16 @@ package jullien.matthieu.moodtracker.Model;
 
 import android.provider.BaseColumns;
 
+/**
+ * Define the mood database structure
+ */
 public class MoodDbContract {
     private MoodDbContract() {
     }
 
-    // Inner class that defines the table contents and queries
+    /**
+     * Inner class that defines the table contents and queries
+     */
     public static class HistoryEntry implements BaseColumns {
         public static final String TABLE_NAME = "history";
         public static final String MOOD_INDEX = "mood";

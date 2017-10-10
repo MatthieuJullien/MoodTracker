@@ -35,15 +35,15 @@ public class HistoryAdapter extends ArrayAdapter<History> {
         History history = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_day, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_row, parent, false);
         }
         int moodIndex = history.getMoodIndex();
 
         convertView.getLayoutParams().width = mMetrics.widthPixels / 5 * (1 + moodIndex);
         convertView.setBackgroundResource(MoodInfo.COLORS[moodIndex]);
 
-        TextView historyDayText = convertView.findViewById(R.id.history_day_text);
-        ImageView historyDayImg = convertView.findViewById(R.id.history_day_image);
+        TextView historyDayText = convertView.findViewById(R.id.history_row_text);
+        ImageView historyDayImg = convertView.findViewById(R.id.history_row_image);
 
         long nbDayPassed = DAYS.convert(new Date().getTime() - history.getDate().getTime(), MILLISECONDS);
         String strdayPassed;

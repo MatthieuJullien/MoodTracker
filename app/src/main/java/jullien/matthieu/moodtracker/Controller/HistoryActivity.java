@@ -14,6 +14,9 @@ import jullien.matthieu.moodtracker.Model.History;
 import jullien.matthieu.moodtracker.R;
 import jullien.matthieu.moodtracker.View.HistoryAdapter;
 
+/**
+ * Display the moods of the last week
+ */
 public class HistoryActivity extends AppCompatActivity {
 
     @Override
@@ -47,6 +50,12 @@ public class HistoryActivity extends AppCompatActivity {
         listView.setAdapter(historyAdapter);
     }
 
+    /**
+     * Get the distribution of the moods in the history
+     * @param historyList ArrayList containing data of the last seven days.
+     * @return an array of float indexing by the moods. Each float represents the number of time
+     * the mood was selected during the last seven days
+     */
     private float[] getMoodDistribution(ArrayList<History> historyList) {
         float[] moodDistribution = {0, 0, 0, 0, 0};
         for (History h : historyList) {
