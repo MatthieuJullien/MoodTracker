@@ -37,6 +37,24 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * @return the date of the last entry in the table
+     */
+    public Date getLastDate() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Date date = null;
+
+        Cursor c = db.rawQuery("SELECT " + MoodDbContract.HistoryEntry.DATE +  " FROM " +
+                MoodDbContract.HistoryEntry.TABLE_NAME +
+                " ORDER BY " + MoodDbContract.HistoryEntry._ID +
+                " DESC LIMIT 1;", null);
+        if (c.moveToLast()) {
+            date = new Date(c.getLong(c.getColumnIndex(MoodDbContract.HistoryEntry.DATE)));
+        }
+        c.close();
+        return date;
+    }
+
+    /**
      * Add a new entry in the history table
      */
     public void addNewDay(int currentMood, String note) {

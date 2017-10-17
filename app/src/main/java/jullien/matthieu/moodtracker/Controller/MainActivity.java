@@ -20,7 +20,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import jullien.matthieu.moodtracker.Model.MoodInfo;
 import jullien.matthieu.moodtracker.R;
@@ -46,12 +48,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Get current mood and note
+        // Get current mood and note
         mPreferences = getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
         mCurrentMood = mPreferences.getInt("currentMood", MoodInfo.HAPPY_INDEX);
         mNote = mPreferences.getString("note", null);
-
-        setAlarm();
 
         mPager = findViewById(R.id.pager);
 
@@ -76,6 +76,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
 
 
+        HistoryDbHelper dbHelper = new HistoryDbHelper(this);
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        Date lastTimeSaved = dbHelper.getLastDate();
+        Date today = Calendar.getInstance().getTime();
+        if (lastTimeSaved == null || !(fmt.format(today).equals(fmt.format(lastTimeSaved)))) {
+            // Save the mood
+            dbHelper.addNewDay(mCurrentMood, mNote);
+            resetMood();
+        }
+        dbHelper.close();
+
         // Set the current page to the current mood
         mPager.setCurrentItem(mCurrentMood);
 
@@ -95,22 +106,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             Toast.makeText(MainActivity.this, "MoodTracker : Une nouvelle journée débute...", Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    /**
-     * Create an alarm to save the app state (mood and note) at midnight everyday
-     */
-    private void setAlarm() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 0); // midnight
-
-        AlarmReceiver alarmReceiver = new AlarmReceiver();
-        alarmReceiver.setMainActivity(this);
-        this.registerReceiver(alarmReceiver, new IntentFilter("jullien.matthieu.moodtracker"));
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent("jullien.matthieu.moodtracker"), 0);
-        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override
@@ -133,6 +128,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             // Set up the input
             final EditText input = new EditText(this);
+            input.setHint(mNote);
 
             // Specify the type of input expected
             input.setInputType(InputType.TYPE_CLASS_TEXT);
