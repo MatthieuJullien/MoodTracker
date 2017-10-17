@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -128,7 +129,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             // Set up the input
             final EditText input = new EditText(this);
-            input.setHint(mNote);
+            input.setHint(mPreferences.getString("note", ""));
+            input.setHintTextColor(ResourcesCompat.getColor(getResources(), R.color.warm_grey, null));
 
             // Specify the type of input expected
             input.setInputType(InputType.TYPE_CLASS_TEXT);
