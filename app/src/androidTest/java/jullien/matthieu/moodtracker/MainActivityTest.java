@@ -51,16 +51,6 @@ public class MainActivityTest {
     }
 
     /**
-     * Verify that the default mood is the happy_mood
-     */
-    @Test
-    public void test_mood_index() throws Exception {
-        int currentMood = mSharedPreferences.getInt("currentMood", -1);
-        assertEquals(currentMood, MoodInfo.HAPPY_INDEX);
-    }
-
-
-    /**
      * Test if there is a correct number of pages in the pager's adapter
      */
     @Test
@@ -74,31 +64,24 @@ public class MainActivityTest {
     @Test
     public void test_swipe() throws Exception {
         final int SUPER_HAPPY_INDEX = 4;
+        final boolean isLastIndex;
+
+        int initialMood = mSharedPreferences.getInt("currentMood", -1);
+        isLastIndex = (initialMood == SUPER_HAPPY_INDEX);
 
         int pageIndexBefore = mPager.getCurrentItem();
         onView(withId(R.id.pager)).perform(swipeUp());
         int pageIndexAfter = mPager.getCurrentItem();
-        int currentMood = mSharedPreferences.getInt("currentMood", -1);
-        assertNotEquals(pageIndexBefore, pageIndexAfter);
-        assertEquals(currentMood, SUPER_HAPPY_INDEX);
+        int finalMood = mSharedPreferences.getInt("currentMood", -1);
+
+        if (isLastIndex) {
+            assertEquals(initialMood, SUPER_HAPPY_INDEX);
+            assertEquals(pageIndexBefore, pageIndexAfter);
+        } else {
+            assertEquals(initialMood, finalMood + 1);
+            assertEquals(pageIndexBefore, pageIndexAfter + 1);
+        }
     }
-
-
-    @Test
-    public void test_note() throws Exception {
-        final String NOTE = "Do you know what ? I'm happy...";
-
-        onView(withId(R.id.main_note_image)).perform(click());
-
-        onView(withText(R.string.validate))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        String currentNote = mSharedPreferences.getString("currentNote", null);
-        assertEquals(NOTE, currentNote);
-    }
-
 
     /**
      * Test if the history button starts HistoryActivity
